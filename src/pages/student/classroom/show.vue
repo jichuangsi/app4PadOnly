@@ -107,6 +107,7 @@ export default {
     return {
         /*imgboxshow:false,
         imgsrc:'',*/
+        raceId:'',
       qdshow:false,
       attachmentsstatus:'',
       attachments:[],
@@ -260,7 +261,7 @@ export default {
     //抢答
     qdconfirm(){
       var timestamp=new Date().getTime()
-      raceAnswer(this.course,timestamp).then(res=>{
+      raceAnswer(this.course,this.raceId,timestamp).then(res=>{
               console.log(res)
               this.qdshow = false
         })
@@ -837,6 +838,7 @@ export default {
         }
         if(classData.data.wsType === "RACE") {
           self.qdshow = true
+          self.raceId = classData.data.raceId
           // MessageBox.confirm('是否抢答?').then(action => {
           //   var id = JSON.parse(localStorage.getItem('user')).userId
           //   var timestamp=new Date().getTime()
