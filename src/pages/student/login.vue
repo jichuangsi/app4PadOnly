@@ -17,7 +17,7 @@
           <div :class="{'color':boolean==true}">✔</div>记住账号密码
         </div>
       </div>
-      <div class="loginButton" @click="submitLogin">登录</div>
+      <div class="loginButton" @click="submitLogin"  :class="{'logincolor':!flag}">登录</div>
     </div>
   </div>
 </template>
@@ -70,7 +70,6 @@ export default {
     async submitLogin() {
       if (this.flag) {
         this.flag = false;
-        localStorage.setItem("flag", this.flag);
         if (this.boolean) {
           localStorage.setItem("account", this.account);
           localStorage.setItem("password", this.password);
@@ -83,6 +82,7 @@ export default {
             });
           } else {
             if (userInfo) {
+               this.flag=true
               this.$router.push({
                 path: "/studentIndex",
                 name: "studentIndex"
@@ -90,17 +90,13 @@ export default {
             }
           }
         } catch (e) {
+          this.flag=true
           Toast({
             message: e,
             position: "middle",
             duration: 1000
           });
         }
-      }else {
-        let flage = localStorage.getItem("flage");
-        localStorage.removeItem("flage");
-        this.flag = flage;
-        this.submitLogin;
       }
     }
   }
@@ -194,6 +190,9 @@ export default {
       background-image: linear-gradient(-166deg, invalid gradient);
       box-shadow: 0 2px 6px 3px #62d8ef,
         0 2px 23px 8px rgba(103, 217, 255, 0.89);
+    }
+    .logincolor {
+      background: #999 !important;
     }
   }
 }

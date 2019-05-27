@@ -13,10 +13,6 @@ export async function login(userAccount, userPwd ) {
             userPwd
         }
     });
-    let flage=localStorage.getItem('flag');
-    localStorage.removeItem('flag')
-    flage=true;
-    localStorage.setItem('flage',flage);
     if (res.data.code === '0010') {
         // console.log(res.data.data.accessToken)
         let oldUser = JSON.parse(localStorage.getItem('user'));
