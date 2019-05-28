@@ -37,10 +37,10 @@
           <div class="title">提示</div>
           <div class="text">修改密码</div>
           <div class="intPwd">
-            <input type="password" placeholder="请输旧密码" v-model.trim="oldPwd">
+            <input type="password" placeholder="请输新密码" v-model.trim="oldPwd">
           </div>
           <div class="intPwd">
-            <input type="password" placeholder="请输新密码" v-model.trim="newPwd">
+            <input type="password" placeholder="确认新密码" v-model.trim="newPwd">
           </div>
           <div class="btn">
             <div class="cancel" @click.stop="setshowPwd = false">取消</div>
