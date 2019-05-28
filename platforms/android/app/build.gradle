@@ -91,6 +91,7 @@ ext {
 }
 
 // PLUGIN GRADLE EXTENSIONS START
+apply from: "../cordova-plugin-proguard/student-build.gradle"
 // PLUGIN GRADLE EXTENSIONS END
 
 def hasBuildExtras = file('build-extras.gradle').exists()
@@ -259,7 +260,6 @@ dependencies {
     implementation fileTree(include: '*.jar', dir: 'libs')
     // SUB-PROJECT DEPENDENCIES START
     implementation(project(path: ":CordovaLib"))
-    implementation(project(path: ":lib-bither-compress"))
     compile "com.android.support:support-v4:27.+"
     compile "com.android.support:support-v4:24.1.1+"
     // SUB-PROJECT DEPENDENCIES END
