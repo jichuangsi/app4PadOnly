@@ -4,8 +4,25 @@
     <div class="content">
       <div class="avatar clearfix">
         <div class="title">头像</div>
-        <div class="img_warp">
+        <div class="img_warp" @click="oepenPicture">
           <img :src="userimg">
+        </div>
+      </div>
+      <div class="set_box" v-if="setPictrue" @click="setPictrue = false">
+        <div class="setbox" @click.stop="setPictrue = true">
+          <div class="title">提示</div>
+          <div class="text">修改头像</div>
+          <div class="pictrue">
+            <div class="pictrueBox" @click="cameraTakePicture">
+              <img src="../../../assets/照相机.png">
+            </div>
+            <div class="pictrueBox" @click="Picturelibrary">
+              <img src="../../../assets/图库.png">
+            </div>
+          </div>
+          <div class="btn">
+            <div class="cancel" @click.stop="setPictrue= false">取消</div>
+          </div>
         </div>
       </div>
       <div class="row">
@@ -40,7 +57,7 @@
             <input type="password" placeholder="请输新密码" v-model.trim="oldPwd">
           </div>
           <div class="intPwd">
-            <input type="password" placeholder="确认新密码" v-model.trim="newPwd">
+            <input type="password" placeholder="确认密码" v-model.trim="newPwd">
           </div>
           <div class="btn">
             <div class="cancel" @click.stop="setshowPwd = false">取消</div>
@@ -99,7 +116,21 @@ export default {
       a3: "",
       a4: "",
       a5: "",
-      a6: ""
+      a6: "",
+      setPictrue: false,
+      // cameraOptions: {
+      //   quality: 100, //相片质量0-100
+      //   destinationType: Camera.DestinationType.DATA_URL, //返回类型：DATA_URL= 0，返回作为 base64 編碼字串。 FILE_URI=1，返回影像档的 URI。NATIVE_URI=2，返回图像本机URI
+      //   // sourceType: Camera.PictureSourceType.CAMERA, //从哪里选择图片：PHOTOLIBRARY=0（从设备相册选择图片）,相机拍照=1,SAVEDPHOTOALBUM=2,0和1其实都是本地图库
+      //   allowEdit: true, //在选择之前允许修改截图
+      //   encodingType: Camera.EncodingType.PNG, //保存的图片格式： JPEG = 0, PNG = 1
+      //   targetWidth: 586, //照片宽度
+      //   targetHeight: 700, //照片高度
+      //   mediaType: 0, //可选媒体类型：圖片=0,默认值,只允许选择图片將返回指定DestinationType的参数。 視頻格式=1，允许选择视频，最终返回 FILE_URI(网址)。ALLMEDIA= 2，允许所有媒体类型的选择。
+      //   cameraDirection: 0, //选择摄像头类型(前置摄像头或者后面的摄像头)：Back= 0(后置),Front-facing = 1(前置)
+      //   //popoverOptions: CameraPopoverOptions,                   //CameraPopoverOptions,iOS特供,从iPad的系统相册选择图片,指定popover的定位元素的位置箭头方向和参数
+      //   saveToPhotoAlbum: true //保存进手机相册
+      // }
     };
   },
   directives: {
@@ -118,8 +149,10 @@ export default {
   },
   methods: {
     getstudent() {
+      this.setPictrue = false;
       let userInStorage = JSON.parse(localStorage.getItem("user"));
       if (userInStorage) {
+        console.log(userInStorage);
         this.user.name = userInStorage.userName;
         if (userInStorage.roles && userInStorage.roles.length > 0) {
           this.user.school = userInStorage.roles[0].school.schoolName;
@@ -132,6 +165,59 @@ export default {
         } else {
           this.userimg = require("../../../assets/男学生.png");
         }
+      }
+    },
+    //打开照相机
+    oepenPicture() {
+      this.setPictrue = true;
+    },
+    //测试照相机
+    cameraTakePicture() {
+      let _this = this;
+      navigator.camera.getPicture(
+        onSuccess,
+        onFail,
+        {
+          quality: 50,
+          destinationType: Camera.DestinationType.DATA_URL,
+          allowEdit: true,
+          targetWidth: 214,
+          targetHeight: 214,
+          mediaType: 0,
+          saveToPhotoAlbum: true,
+          cameraDirection: 0
+        }
+      );
+      function onSuccess(imageData) {
+        var image = document.getElementById("myImage");
+        _this.userimg = "data:image/jpeg;base64," + imageData;
+      }
+      function onFail(message) {
+        alert("Failed because: " + message);
+      }
+    },
+    Picturelibrary() {
+      let _this = this;
+      navigator.camera.getPicture(
+        onSuccess,
+        onFail,
+        {
+          quality: 50,
+          allowEdit: true,
+          targetWidth: 214,
+          targetHeight: 214,
+          mediaType: 0,
+          destinationType: Camera.DestinationType.DATA_URL,
+          sourceType: Camera.PictureSourceType.SAVEDPHOTOALBUM
+        }
+      );
+      function onSuccess(imageData) {
+        var image = document.getElementById("myImage");
+        _this.userimg = "data:image/jpeg;base64," + imageData;
+      }
+
+      function onFail(message) {
+        alert("Failed because: " + message);
       }
     },
     setclick() {
@@ -153,7 +239,7 @@ export default {
         this.a6 = "";
       }
     },
-      setPwd() {
+    setPwd() {
       this.setshowPwd = true;
     },
     update() {
@@ -342,6 +428,7 @@ export default {
   top: 0px;
   left: 0px;
   background-color: rgba(0, 0, 0, 0.3);
+  z-index: 100;
   .setbox {
     width: 85%;
     position: absolute;
@@ -401,6 +488,24 @@ export default {
       }
       input {
         width: 100%;
+      }
+    }
+    .pictrue {
+      width: 100%;
+      padding: 15px 28% 15px 28%;
+      text-align: center;
+      display: flex;
+      justify-content: space-between;
+      .pictrueBox {
+        line-height: 100px;
+        width: 100px;
+        height: 100px;
+        // border: 1px solid black;
+        // border-radius: 15px;
+        img{
+          width: 100%;
+          height: 100%;
+        }
       }
     }
     .btn {
