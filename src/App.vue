@@ -162,6 +162,7 @@
                 document.addEventListener('offline', function () {
                     //debugger
                     //console.log("网络异常，不能连接到服务器！");
+                    //console.log(_this.networkTips);
                     if(!_this.networkTips){
                         _this.networkTips = setInterval(function() {
                             Toast({
@@ -173,7 +174,10 @@
                     }
                 }, false);
                 document.addEventListener("online", function(){
+                    //console.log("b："+_this.networkTips);
                     clearInterval(_this.networkTips);
+                    _this.networkTips = null;
+                    //console.log("a："+_this.networkTips);
                     Toast({
                         message: '网络恢复，请重新刷新当前页面！',
                         position: 'middle',
