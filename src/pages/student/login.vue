@@ -83,12 +83,11 @@ export default {
             this.$router.push({
               path: this.$store.state.userroute
             });
-
             //  getHeadPortrait(userInfo.portrait);
           } else {
-            if (userInfo.portrait != null) {
+            /*if (userInfo.portrait != null) {
               let a = await getImg(userInfo.portrait);
-            }
+            }*/
             if (userInfo) {
               this.flag = true;
               this.$router.push({

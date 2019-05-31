@@ -41,10 +41,10 @@
         <div class="title">班级</div>
         <div class="text">{{this.user.primaryClass}}</div>
       </div>
-      <div class="row" @click="setclick">
+      <!--<div class="row" @click="setclick">
         <div class="title">蓝牙设备</div>
         <div class="text">{{this.id}}</div>
-      </div>
+      </div>-->
       <div class="row" @click="setPwd">
         <div class="title">修改密码</div>
         <div class="text"></div>
@@ -219,7 +219,7 @@ export default {
           _this.userimg = "data:image/jpeg;base64," + imageData;
         }
         function onFail(message) {
-          alert("Failed because: " + message);
+          //alert("Failed because: " + message);
         }
       } else {
         Toast("设备没响应，请稍后重试");
@@ -252,7 +252,7 @@ export default {
         }
 
         function onFail(message) {
-          alert("Failed because: " + message);
+          //alert("Failed because: " + message);
         }
       } else {
         Toast("设备没响应，请稍后重试");
