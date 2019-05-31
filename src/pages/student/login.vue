@@ -17,7 +17,7 @@
           <div :class="{'color':boolean==true}">✔</div>记住账号密码
         </div>
       </div>
-      <div class="loginButton" @click="submitLogin"  :class="{'logincolor':!flag}">登录</div>
+      <div class="loginButton" @click="submitLogin" :class="{'logincolor':!flag}">登录</div>
     </div>
   </div>
 </template>
@@ -27,7 +27,7 @@
 <script>
 import { login } from "@/api/login";
 import { Toast } from "mint-ui";
-
+import { getImg } from "@/api/student/classroom";
 export default {
   name: "login",
   data() {
@@ -76,21 +76,37 @@ export default {
         }
         try {
           let userInfo = await login(this.account, this.password);
+
           if (this.$store.state.userroute) {
-            this.$router.push({
-              path: this.$store.state.userroute
+            //获取头像
+            getImg(userInfo.portrait).then(res => {
+              if (res.data.code === "0010") {
+                var imgString = res.data;
+                localStorage.setItem("img", imgString.data.content);
+                this.$router.push({
+                  path: this.$store.state.userroute
+                });
+              }
             });
           } else {
             if (userInfo) {
-               this.flag=true
-              this.$router.push({
-                path: "/studentIndex",
-                name: "studentIndex"
+               this.flag = true;
+                //获取头像
+              getImg(userInfo.portrait).then(res => {
+                if (res.data.code === "0010") {
+                  var imgString = res.data;
+                  localStorage.setItem("img", imgString.data.content);
+                  this.$router.push({
+                    path: "/studentIndex",
+                    name: "studentIndex"
+                  });
+                }
               });
+             
             }
           }
         } catch (e) {
-          this.flag=true
+          this.flag = true;
           Toast({
             message: e,
             position: "middle",

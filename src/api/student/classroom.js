@@ -4,7 +4,7 @@ import axios from '../../utils/axios'
 //const host = 'http://api.jichuangsi.com/CLASSINTERACTION/';
 const apiUrl = '/COURSESERVICE/student/';
 const host = '/CLASSINTERACTION/';
-const service='/USERSERVICE/';
+const service = '/USERSERVICE/';
 
 //课程列表
 export function getList() {
@@ -16,7 +16,7 @@ export function getList() {
 }
 
 //修改密码
-export function updatePwd(userId,oldPwd,newPwd) {
+export function updatePwd(userId, oldPwd, newPwd) {
     return axios({
         method: 'POST',
         url: `${service}updateOtherPwd/${userId}`,
@@ -25,6 +25,32 @@ export function updatePwd(userId,oldPwd,newPwd) {
             newPwd
         },
         //headers: {'accessToken': localStorage.getItem('token')}
+    });
+}
+//修改头像
+export function updateImg(content) {
+    let contentType = 'image/jpeg';
+    let name = 'test.jpg';
+    return axios({
+        method: 'POST',
+        url: `${service}portrait/sendByString`,
+        data: {
+            content,
+            name,
+            contentType
+        },
+        // headers: {'accessToken': localStorage.getItem('token')}
+    });
+}
+//获取头像
+export function getImg(portrait) {
+    return axios({
+        method: 'post',
+        url: `${service}portrait/getByString`,
+        data: {
+            sub:portrait
+        },
+        // headers: {'accessToken': localStorage.getItem('token')}
     });
 }
 //历史课程列表
@@ -207,7 +233,7 @@ export function aiPushQuestions(knowledgeId, qtypeId, diff) {
     });
 }
 //进入课堂
-export function raceAnswer(courseId,raceId) {
+export function raceAnswer(courseId, raceId) {
     return axios({
         method: 'post',
         url: `${host}raceAnswer/${courseId}/${raceId}`,

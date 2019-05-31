@@ -14,10 +14,10 @@
           <div class="text">修改头像</div>
           <div class="pictrue">
             <div class="pictrueBox" @click="cameraTakePicture">
-              <img src="../../../assets/照相机.png">
+              <!-- <img src="../../../assets/照相机.png"> -->
             </div>
-            <div class="pictrueBox" @click="Picturelibrary">
-              <img src="../../../assets/图库.png">
+            <div class="pictrueBox1" @click="Picturelibrary">
+              <!-- <img src="../../../assets/图库.png"> -->
             </div>
           </div>
           <div class="btn">
@@ -89,7 +89,7 @@
 
 <script>
 import PublicHeader from "../../../components/public/PublicHeader";
-import { updatePwd } from "@/api/student/classroom";
+import { updatePwd, updateImg, getImg } from "@/api/student/classroom";
 import { Toast } from "mint-ui";
 export default {
   name: "myShow",
@@ -117,7 +117,7 @@ export default {
       a4: "",
       a5: "",
       a6: "",
-      setPictrue: false,
+      setPictrue: false
       // cameraOptions: {
       //   quality: 100, //相片质量0-100
       //   destinationType: Camera.DestinationType.DATA_URL, //返回类型：DATA_URL= 0，返回作为 base64 編碼字串。 FILE_URI=1，返回影像档的 URI。NATIVE_URI=2，返回图像本机URI
@@ -152,7 +152,6 @@ export default {
       this.setPictrue = false;
       let userInStorage = JSON.parse(localStorage.getItem("user"));
       if (userInStorage) {
-        console.log(userInStorage);
         this.user.name = userInStorage.userName;
         if (userInStorage.roles && userInStorage.roles.length > 0) {
           this.user.school = userInStorage.roles[0].school.schoolName;
@@ -160,10 +159,15 @@ export default {
           this.user.primaryClass =
             userInStorage.roles[0].primaryClass.className;
         }
-        if (userInStorage.userSex == "FEMALE") {
-          this.userimg = require("../../../assets/女学生.png");
+        var img = localStorage.getItem("img") ? localStorage.getItem("img") : "";
+        if (img) {
+          this.userimg = "data:image/jpeg;base64," + img;
         } else {
-          this.userimg = require("../../../assets/男学生.png");
+          if (userInStorage.userSex == "FEMALE") {
+            this.userimg = require("../../../assets/女学生.png");
+          } else {
+            this.userimg = require("../../../assets/男学生.png");
+          }
         }
       }
     },
@@ -174,45 +178,55 @@ export default {
     //测试照相机
     cameraTakePicture() {
       let _this = this;
-      navigator.camera.getPicture(
-        onSuccess,
-        onFail,
-        {
-          quality: 50,
-          destinationType: Camera.DestinationType.DATA_URL,
-          allowEdit: true,
-          targetWidth: 214,
-          targetHeight: 214,
-          mediaType: 0,
-          saveToPhotoAlbum: true,
-          cameraDirection: 0
-        }
-      );
+      navigator.camera.getPicture(onSuccess, onFail, {
+        quality: 50,
+        destinationType: Camera.DestinationType.DATA_URL,
+        allowEdit: true,
+        targetWidth: 214,
+        targetHeight: 214,
+        mediaType: 0,
+        saveToPhotoAlbum: true,
+        cameraDirection: 0,
+        encodingType: Camera.EncodingType.PNG
+      });
       function onSuccess(imageData) {
         var image = document.getElementById("myImage");
+        updateImg(imageData).then(res => {
+          if (res.data.code === "0010") {
+            Toast("修改成功");
+            localStorage.setItem("img", imageData);
+          } else {
+            Toast("修改失败");
+          }
+        });
         _this.userimg = "data:image/jpeg;base64," + imageData;
       }
       function onFail(message) {
         alert("Failed because: " + message);
       }
     },
+    //图库
     Picturelibrary() {
       let _this = this;
-      navigator.camera.getPicture(
-        onSuccess,
-        onFail,
-        {
-          quality: 50,
-          allowEdit: true,
-          targetWidth: 214,
-          targetHeight: 214,
-          mediaType: 0,
-          destinationType: Camera.DestinationType.DATA_URL,
-          sourceType: Camera.PictureSourceType.SAVEDPHOTOALBUM
-        }
-      );
+      navigator.camera.getPicture(onSuccess, onFail, {
+        quality: 50,
+        allowEdit: true,
+        targetWidth: 214,
+        targetHeight: 214,
+        mediaType: 0,
+        destinationType: Camera.DestinationType.DATA_URL,
+        sourceType: Camera.PictureSourceType.SAVEDPHOTOALBUM
+      });
       function onSuccess(imageData) {
         var image = document.getElementById("myImage");
+        updateImg(imageData).then(res => {
+          if (res.data.code === "0010") {
+            Toast("修改成功");
+            localStorage.setItem("img", imageData);
+          } else {
+            Toast("修改失败");
+          }
+        });
         _this.userimg = "data:image/jpeg;base64," + imageData;
       }
 
@@ -500,12 +514,15 @@ export default {
         line-height: 100px;
         width: 100px;
         height: 100px;
-        // border: 1px solid black;
-        // border-radius: 15px;
-        img{
-          width: 100%;
-          height: 100%;
-        }
+        background: url('../../../assets/按钮.png') no-repeat;
+        background-position: -156px -3185px;
+      }
+      .pictrueBox1 {
+        line-height: 100px;
+        width: 100px;
+        height: 100px;
+        background: url('../../../assets/按钮.png') no-repeat;
+        background-position: -156px -3285px;
       }
     }
     .btn {

@@ -1,81 +1,82 @@
   <template>
-    <div class="My">
-        <div class="top">
-            <div class="fl">
-                版本：{{this.appVersion}}
-            </div>
-            <h2>个人中心</h2>
-            <div class="fr">
-                <router-link to="/myShow">
-                    <i class="iconfont icon-xinxi" style="font-size:2rem"></i><span>资料</span>
-                </router-link>
-            </div>
-        </div>
-        <div class="center">
-            <div class="user">
-                <div class="userimg">
-                    <div class="img"><img :src="userimg" alt="" style="width: 100%;height: 100%;"></div>
-                </div>
-                <div class="username">{{username}}</div>
-                <div class="usertext">{{usertext}}</div>
-            </div>
-            <div class="nav">
-                <ul>
-                    <router-link to="/studentenquiry">
-                        <li>
-                            <div class="left">我的成绩</div>
-                            <div class="right">
-                                <i class="iconfont icon-icon-arrow-right2"></i>
-                            </div>
-                        </li>
-                    </router-link>
-                    <router-link to="/studenthomework">
-                        <li>
-                            <div class="left">习题详情</div>
-                            <div class="right">
-                                <i class="iconfont icon-icon-arrow-right2"></i>
-                            </div>
-                        </li>
-                    </router-link>
-                    <router-link to="/studentCollection">
-                        <li>
-                            <div class="left">我的收藏</div>
-                            <div class="right">
-                                <i class="iconfont icon-icon-arrow-right2"></i>
-                            </div>
-                        </li>
-                    </router-link>
-                    <router-link to="/mistakescollection">
-                        <li>
-                            <div class="left">错题集</div>
-                            <div class="right">
-                                <i class="iconfont icon-icon-arrow-right2"></i>
-                            </div>
-                        </li>
-                    </router-link>
-                    <router-link to="/Schedule">
-                        <li>
-                            <div class="left">课程表</div>
-                            <div class="right">
-                                <i class="iconfont icon-icon-arrow-right2"></i>
-                            </div>
-                        </li>
-                    </router-link>
-                    <li @click="loginout">
-                        <div class="left">退出登录</div>
-                        <div class="right">
-                            <i class="iconfont icon-icon-arrow-right2"></i>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <loading v-if="loading" />
+  <div class="My">
+    <div class="top">
+      <div class="fl">版本：{{this.appVersion}}</div>
+      <h2>个人中心</h2>
+      <div class="fr">
+        <router-link to="/myShow">
+          <i class="iconfont icon-xinxi" style="font-size:2rem"></i>
+          <span>资料</span>
+        </router-link>
+      </div>
     </div>
+    <div class="center">
+      <div class="user">
+        <div class="userimg">
+          <div class="img">
+            <img :src="userimg" alt style="width: 100%;height: 100%;">
+          </div>
+        </div>
+        <div class="username">{{username}}</div>
+        <div class="usertext">{{usertext}}</div>
+      </div>
+      <div class="nav">
+        <ul>
+          <router-link to="/studentenquiry">
+            <li>
+              <div class="left">我的成绩</div>
+              <div class="right">
+                <i class="iconfont icon-icon-arrow-right2"></i>
+              </div>
+            </li>
+          </router-link>
+          <router-link to="/studenthomework">
+            <li>
+              <div class="left">习题详情</div>
+              <div class="right">
+                <i class="iconfont icon-icon-arrow-right2"></i>
+              </div>
+            </li>
+          </router-link>
+          <router-link to="/studentCollection">
+            <li>
+              <div class="left">我的收藏</div>
+              <div class="right">
+                <i class="iconfont icon-icon-arrow-right2"></i>
+              </div>
+            </li>
+          </router-link>
+          <router-link to="/mistakescollection">
+            <li>
+              <div class="left">错题集</div>
+              <div class="right">
+                <i class="iconfont icon-icon-arrow-right2"></i>
+              </div>
+            </li>
+          </router-link>
+          <router-link to="/Schedule">
+            <li>
+              <div class="left">课程表</div>
+              <div class="right">
+                <i class="iconfont icon-icon-arrow-right2"></i>
+              </div>
+            </li>
+          </router-link>
+          <li @click="loginout">
+            <div class="left">退出登录</div>
+            <div class="right">
+              <i class="iconfont icon-icon-arrow-right2"></i>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <loading v-if="loading"/>
+  </div>
 </template>
 <script>
 import Loading from "../public/Loading";
-import store from '@/store'
+import store from "@/store";
 
 export default {
   name: "my",
@@ -88,8 +89,8 @@ export default {
       pageShow: false, //内容状态
       username: "韩梅梅",
       usertext: "学如逆水行舟，不进则退。",
-      userimg: '',
-      appVersion: ''
+      userimg: "",
+      appVersion: ""
     };
   },
   activated() {
@@ -98,28 +99,34 @@ export default {
   methods: {
     //获取数据
     getMy() {
-        this.pageShow = true;
-        this.loading = false;
-        let user = JSON.parse(localStorage.getItem('user'))
-      if(user.userSex=="FEMALE"){
-        this.userimg = require('../../assets/女学生.png')
-      }else{
-        this.userimg = require('../../assets/男学生.png')
+      this.pageShow = true;
+      this.loading = false;
+      var img = localStorage.getItem("img") ? localStorage.getItem("img") : "";
+      let user = JSON.parse(localStorage.getItem("user"));
+      if (img) {
+        this.userimg = "data:image/jpeg;base64," + img;
+      } else {
+        if (user.userSex == "FEMALE") {
+          this.userimg = require("../../assets/女学生.png");
+        } else {
+          this.userimg = require("../../assets/男学生.png");
+        }
       }
       this.username = user.userName;
-        let _this = this;
-        cordova.getAppVersion.getVersionNumber().then(function (version) {
-            _this.appVersion = version;
-            _this.$forceUpdate();
-        });
+      let _this = this;
+      cordova.getAppVersion.getVersionNumber().then(function(version) {
+        _this.appVersion = version;
+        _this.$forceUpdate();
+      });
     },
     loginout() {
-      localStorage.removeItem('token');
+      localStorage.removeItem("img");
+      localStorage.removeItem("token");
       //localStorage.removeItem('user');
-      store.commit('IS_CNEW', false);
-      store.commit('IS_HNEW', false);
+      store.commit("IS_CNEW", false);
+      store.commit("IS_HNEW", false);
       //window.HandwrittenBoard.disconnect();
-      this.$router.push({ path: "/", name: "login" })
+      this.$router.push({ path: "/", name: "login" });
     }
   }
 };
@@ -133,19 +140,19 @@ export default {
   background-size: 100% 100%;
   overflow: hidden;
   position: relative;
-    .fl {
-        float: left;
-        position: absolute;
-        top: 2.7rem;
-        left: 3.1rem;
-        font-size: 2rem;
-        color: #fff;
-    }
+  .fl {
+    float: left;
+    position: absolute;
+    top: 2.7rem;
+    left: 3.1rem;
+    font-size: 2rem;
+    color: #fff;
+  }
   h2 {
     text-align: center;
     font-size: 3.8rem;
     padding-top: 6.8rem;
-    color:#fff;
+    color: #fff;
   }
   .fr {
     float: right;
@@ -155,11 +162,11 @@ export default {
     font-size: 2rem;
     color: #fff;
     i {
-        font-size: 2.8rem !important;
-        vertical-align: middle !important;
+      font-size: 2.8rem !important;
+      vertical-align: middle !important;
     }
     span {
-        vertical-align: middle;
+      vertical-align: middle;
     }
   }
 }
