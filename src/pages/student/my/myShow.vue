@@ -117,7 +117,8 @@ export default {
       a4: "",
       a5: "",
       a6: "",
-      setPictrue: false
+      setPictrue: false,
+      ready: false
       // cameraOptions: {
       //   quality: 100, //相片质量0-100
       //   destinationType: Camera.DestinationType.DATA_URL, //返回类型：DATA_URL= 0，返回作为 base64 編碼字串。 FILE_URI=1，返回影像档的 URI。NATIVE_URI=2，返回图像本机URI
@@ -142,12 +143,25 @@ export default {
     }
   },
   mounted() {
+    this.initialize();
     this.getstudent();
     this.id = localStorage.getItem("bluetooth")
       ? localStorage.getItem("bluetooth")
       : "";
   },
   methods: {
+    initialize() {
+      let _this = this;
+      document.addEventListener(
+        "deviceready",
+        _this.onDeviceReady.bind(this),
+        false
+      );
+    },
+    // deviceready Event Handler
+    onDeviceReady() {
+      this.ready = true;
+    },
     getstudent() {
       this.setPictrue = false;
       let userInStorage = JSON.parse(localStorage.getItem("user"));
@@ -159,7 +173,9 @@ export default {
           this.user.primaryClass =
             userInStorage.roles[0].primaryClass.className;
         }
-        var img = localStorage.getItem("img") ? localStorage.getItem("img") : "";
+        var img = localStorage.getItem("HeadPortrait")
+          ? localStorage.getItem("HeadPortrait")
+          : "";
         if (img) {
           this.userimg = "data:image/jpeg;base64," + img;
         } else {
@@ -177,61 +193,69 @@ export default {
     },
     //测试照相机
     cameraTakePicture() {
-      let _this = this;
-      navigator.camera.getPicture(onSuccess, onFail, {
-        quality: 50,
-        destinationType: Camera.DestinationType.DATA_URL,
-        allowEdit: true,
-        targetWidth: 214,
-        targetHeight: 214,
-        mediaType: 0,
-        saveToPhotoAlbum: true,
-        cameraDirection: 0,
-        encodingType: Camera.EncodingType.PNG
-      });
-      function onSuccess(imageData) {
-        var image = document.getElementById("myImage");
-        updateImg(imageData).then(res => {
-          if (res.data.code === "0010") {
-            Toast("修改成功");
-            localStorage.setItem("img", imageData);
-          } else {
-            Toast("修改失败");
-          }
+      if (this.ready) {
+        let _this = this;
+        navigator.camera.getPicture(onSuccess, onFail, {
+          quality: 50,
+          destinationType: Camera.DestinationType.DATA_URL,
+          allowEdit: true,
+          targetWidth: 214,
+          targetHeight: 214,
+          mediaType: 0,
+          saveToPhotoAlbum: true,
+          cameraDirection: 0,
+          encodingType: Camera.EncodingType.PNG
         });
-        _this.userimg = "data:image/jpeg;base64," + imageData;
-      }
-      function onFail(message) {
-        alert("Failed because: " + message);
+        function onSuccess(imageData) {
+          var image = document.getElementById("myImage");
+          updateImg(imageData).then(res => {
+            if (res.data.code === "0010") {
+              Toast("修改成功");
+              localStorage.setItem("HeadPortrait", imageData);
+            } else {
+              Toast("修改失败");
+            }
+          });
+          _this.userimg = "data:image/jpeg;base64," + imageData;
+        }
+        function onFail(message) {
+          alert("Failed because: " + message);
+        }
+      } else {
+        Toast("设备没响应，请稍后重试");
       }
     },
     //图库
     Picturelibrary() {
-      let _this = this;
-      navigator.camera.getPicture(onSuccess, onFail, {
-        quality: 50,
-        allowEdit: true,
-        targetWidth: 214,
-        targetHeight: 214,
-        mediaType: 0,
-        destinationType: Camera.DestinationType.DATA_URL,
-        sourceType: Camera.PictureSourceType.SAVEDPHOTOALBUM
-      });
-      function onSuccess(imageData) {
-        var image = document.getElementById("myImage");
-        updateImg(imageData).then(res => {
-          if (res.data.code === "0010") {
-            Toast("修改成功");
-            localStorage.setItem("img", imageData);
-          } else {
-            Toast("修改失败");
-          }
+      if (this.ready) {
+        let _this = this;
+        navigator.camera.getPicture(onSuccess, onFail, {
+          quality: 50,
+          allowEdit: true,
+          targetWidth: 214,
+          targetHeight: 214,
+          mediaType: 0,
+          destinationType: Camera.DestinationType.DATA_URL,
+          sourceType: Camera.PictureSourceType.SAVEDPHOTOALBUM
         });
-        _this.userimg = "data:image/jpeg;base64," + imageData;
-      }
+        function onSuccess(imageData) {
+          var image = document.getElementById("myImage");
+          updateImg(imageData).then(res => {
+            if (res.data.code === "0010") {
+              Toast("修改成功");
+              localStorage.setItem("HeadPortrait", imageData);
+            } else {
+              Toast("修改失败");
+            }
+          });
+          _this.userimg = "data:image/jpeg;base64," + imageData;
+        }
 
-      function onFail(message) {
-        alert("Failed because: " + message);
+        function onFail(message) {
+          alert("Failed because: " + message);
+        }
+      } else {
+        Toast("设备没响应，请稍后重试");
       }
     },
     setclick() {
@@ -514,15 +538,17 @@ export default {
         line-height: 100px;
         width: 100px;
         height: 100px;
-        background: url('../../../assets/按钮.png') no-repeat;
-        background-position: -156px -3185px;
+        background: url("../../../assets/按钮.png") no-repeat;
+        background-size: 600px 1750px;
+        background-position: -289px -1593.5px;
       }
       .pictrueBox1 {
         line-height: 100px;
         width: 100px;
         height: 100px;
-        background: url('../../../assets/按钮.png') no-repeat;
-        background-position: -156px -3285px;
+        background: url("../../../assets/按钮.png") no-repeat;
+         background-size: 600px 1750px;
+        background-position: -61px -1589px;
       }
     }
     .btn {

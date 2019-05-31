@@ -43,15 +43,23 @@ export function updateImg(content) {
     });
 }
 //获取头像
-export function getImg(portrait) {
-    return axios({
+export async function getImg(portrait) {
+    let res = await axios({
         method: 'post',
         url: `${service}portrait/getByString`,
         data: {
-            sub:portrait
+            sub: portrait
         },
         // headers: {'accessToken': localStorage.getItem('token')}
     });
+    if (res.data.code === '0010') {
+        var imgString = res.data.data.content;
+        localStorage.setItem("HeadPortrait", imgString);
+        return imgString ? imgString : "";
+    } else {
+        throw res.data.msg;
+    }
+
 }
 //历史课程列表
 export function getHistory(pageNum) {

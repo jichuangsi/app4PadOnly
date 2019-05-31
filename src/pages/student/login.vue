@@ -76,33 +76,25 @@ export default {
         }
         try {
           let userInfo = await login(this.account, this.password);
-
+          if (userInfo.portrait != null) {
+            let a = await getImg(userInfo.portrait);
+          }
           if (this.$store.state.userroute) {
-            //获取头像
-            getImg(userInfo.portrait).then(res => {
-              if (res.data.code === "0010") {
-                var imgString = res.data;
-                localStorage.setItem("img", imgString.data.content);
-                this.$router.push({
-                  path: this.$store.state.userroute
-                });
-              }
+            this.$router.push({
+              path: this.$store.state.userroute
             });
+
+            //  getHeadPortrait(userInfo.portrait);
           } else {
+            if (userInfo.portrait != null) {
+              let a = await getImg(userInfo.portrait);
+            }
             if (userInfo) {
-               this.flag = true;
-                //获取头像
-              getImg(userInfo.portrait).then(res => {
-                if (res.data.code === "0010") {
-                  var imgString = res.data;
-                  localStorage.setItem("img", imgString.data.content);
-                  this.$router.push({
-                    path: "/studentIndex",
-                    name: "studentIndex"
-                  });
-                }
+              this.flag = true;
+              this.$router.push({
+                path: "/studentIndex",
+                name: "studentIndex"
               });
-             
             }
           }
         } catch (e) {

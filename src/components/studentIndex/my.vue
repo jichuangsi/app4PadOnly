@@ -101,7 +101,9 @@ export default {
     getMy() {
       this.pageShow = true;
       this.loading = false;
-      var img = localStorage.getItem("img") ? localStorage.getItem("img") : "";
+      var img = localStorage.getItem("HeadPortrait")
+        ? localStorage.getItem("HeadPortrait")
+        : "";
       let user = JSON.parse(localStorage.getItem("user"));
       if (img) {
         this.userimg = "data:image/jpeg;base64," + img;
@@ -120,7 +122,7 @@ export default {
       });
     },
     loginout() {
-      localStorage.removeItem("img");
+      localStorage.removeItem("HeadPortrait");
       localStorage.removeItem("token");
       //localStorage.removeItem('user');
       store.commit("IS_CNEW", false);
