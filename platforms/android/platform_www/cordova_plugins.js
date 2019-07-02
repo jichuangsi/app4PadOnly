@@ -299,6 +299,14 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       "clobbers": [
         "CameraPopoverHandle"
       ]
+    },
+    {
+      "id": "cordova-plugin-brightness.Brightness",
+      "file": "plugins/cordova-plugin-brightness/www/brightness.js",
+      "pluginId": "cordova-plugin-brightness",
+      "clobbers": [
+        "cordova.plugins.brightness"
+      ]
     }
   ];
   module.exports.metadata = {
@@ -314,6 +322,8 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
     "cordova-plugin-file-opener2": "2.1.3",
     "cordova-plugin-app-version": "0.1.9",
     "cordova-plugin-network-information": "2.0.1",
-    "cordova-plugin-camera": "4.0.3"
+    "cordova-plugin-camera": "4.0.3",
+    "cordova-plugin-proguard": "1.0.0",
+    "cordova-plugin-brightness": "0.1.5"
   };
 });
