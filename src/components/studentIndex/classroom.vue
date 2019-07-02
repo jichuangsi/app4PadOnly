@@ -67,6 +67,7 @@
         },
         data() {
             return {
+                timer:'',
                 navtext:'全科',
                 navindex:0,
                 nav: ['全科', '语文', '数学', '英语', '政治', '地理', '历史', '生物', '物理', '化学'],
@@ -137,8 +138,20 @@
                 store.commit('IS_CNEW', false);
             }
             this.connect();
+            this.setTime()
         },
         methods: {
+            setTime(){
+                let self = this
+                this.timer = setInterval(() => {
+                try {
+                self.stompClient.send("test");
+                } catch (err) {
+                console.log("断线了: " + err);
+                self.connect();
+                }
+                }, 20000);
+            },
             //选择科目
             navclick(item,index) {
                 this.navindex = index
@@ -358,6 +371,10 @@
         beforeDestroy() {
             //取消订阅
             this.stompClient.unsubscribe('/topic/group/student/'+this.classId);
+        },
+        destroyed: function () {
+            console.log('离开了')
+            clearInterval(this.timer)
         }
     }
 </script>
