@@ -10,7 +10,7 @@
             </div>
             <div class="tips" v-if="classNew"><span class="point"></span><span class="text">老师布置了新题目</span></div>
             <!--今天的课堂-->
-            
+
             <div
                     class="list"
                     :class="{nowClass:item.courseStatus === 'PROGRESS',newClass:newborder==1&&index==0}"
@@ -341,6 +341,13 @@
                     _this.subscription = _this.stompClient.subscribe('/topic/group/student/'+_this.classId, function (response) {
                         _this.classData(response);
                     }, subHeader);
+                },
+                function errorCallBack(error) {
+                    // 连接失败时（服务器响应 ERROR 帧）的回调方法
+                    console.log("连接失败");
+                    setTimeout(function(){
+                       _this.connect()
+                    })
                 });
             },
             //上课提示回调
@@ -366,15 +373,33 @@
                         }
                     }
                 }
+            },
+            disconnectWS(){
+                //取消订阅
+                this.stompClient.unsubscribe('/topic/group/student/'+this.classId);
+                this.stompClient.disconnect(function disconnectCallback(){
+                    console.log("连接断开：/topic/group/student/....")
+                },{
+                    login: "mylogin",
+                    passcode: "mypasscode",
+                    // additional header
+                    request: 'stompClient',
+                    userId: "curUserId",
+                    accessToken: this.token
+                });
             }
         },
+        deactivated(){
+          console.log('离开了')
+          this.disconnectWS();
+          clearInterval(this.timer);
+        },
         beforeDestroy() {
-            //取消订阅
-            this.stompClient.unsubscribe('/topic/group/student/'+this.classId);
+            //this.disconnectWS();
         },
         destroyed: function () {
-            console.log('离开了')
-            clearInterval(this.timer)
+            /*console.log('离开了')
+            clearInterval(this.timer)*/
         }
     }
 </script>
