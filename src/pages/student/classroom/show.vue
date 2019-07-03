@@ -780,7 +780,7 @@ export default {
       let socket = new SockJS(this.wsUrl + "/websocket/course");
       this.stompClient = Stomp.over(socket); //一些老的浏览器不支持WebSocket的脚本或者使用别的名字。默认下，stomp.js会使用浏览器原生的WebSocket class去创建WebSocket。利用Stomp.over(ws)这个方法可以使用其他类型的WebSockets。这个方法得到一个满足WebSocket定义的对象
 
-      this.stompClient.heartbeat.outgoing = 400000; // client will send heartbeats every 40000ms
+      this.stompClient.heartbeat.outgoing = 0; // client will send heartbeats every 40000ms
       this.stompClient.heartbeat.incoming = 0; // client does not want to receive heartbeats from the server
       //连接时的请求头部信息
       let headers = {
@@ -892,7 +892,7 @@ export default {
 
       // 获取 STOMP 子协议的客户端对象
       this.stompClient1 = Stomp.over(socket);
-      this.stompClient1.heartbeat.outgoing = 400000; // client will send heartbeats every 40000ms
+      this.stompClient1.heartbeat.outgoing = 0; // client will send heartbeats every 40000ms
       this.stompClient1.heartbeat.incoming = 0; // client does not want to receive heartbeats from the server
 
       let _this = this;
