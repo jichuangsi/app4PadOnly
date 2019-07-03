@@ -243,8 +243,8 @@ export default {
     this.time();
     this.connect();
     this.connectfile();
-    this.setTime();
-    this.setTime1();
+    //this.setTime();
+    //this.setTime1();
   },
   computed: {
     //vuex 调用

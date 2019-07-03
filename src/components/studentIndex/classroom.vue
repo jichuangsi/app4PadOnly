@@ -138,7 +138,7 @@
                 store.commit('IS_CNEW', false);
             }
             this.connect();
-            this.setTime()
+            //this.setTime()
         },
         methods: {
             setTime(){
