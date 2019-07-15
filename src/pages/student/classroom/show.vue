@@ -175,7 +175,9 @@ export default {
             cameraDirection:0,                                      //选择摄像头类型(前置摄像头或者后面的摄像头)：Back= 0(后置),Front-facing = 1(前置)
             //popoverOptions: CameraPopoverOptions,                   //CameraPopoverOptions,iOS特供,从iPad的系统相册选择图片,指定popover的定位元素的位置箭头方向和参数
             saveToPhotoAlbum: true                                  //保存进手机相册
-        }
+        },
+        lockReconnect: false,
+        lockReconnect1: false
     };
   },
   watch: {
@@ -822,9 +824,12 @@ export default {
         function errorCallBack(error) {
           // 连接失败时（服务器响应 ERROR 帧）的回调方法
           console.log("课堂详情ws连接失败");
-          setTimeout(function(){
-            _this.connect()
-          })
+            if (_this.lockReconnect) return;
+            _this.lockReconnect = true;
+            setTimeout(function(){
+                _this.connect();
+                _this.lockReconnect = false;
+            }, 10000)
         });
     },
     //订阅课堂
@@ -925,9 +930,12 @@ export default {
         function errorCallBack(error) {
           // 连接失败时（服务器响应 ERROR 帧）的回调方法
           console.log("共享附件ws连接失败");
-          setTimeout(function(){
-            _this.connectfile()
-          })
+            if (_this.lockReconnect1) return;
+            _this.lockReconnect1 = true;
+            setTimeout(function(){
+                _this.connectfile();
+                _this.lockReconnect1 = false;
+            }, 10000)
         }
       );
     }
